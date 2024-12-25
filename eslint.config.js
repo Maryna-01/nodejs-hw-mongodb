@@ -13,7 +13,7 @@ export default [
             'no-unused-vars': ['error', {
                 args: 'none'
             }],
-            'no-undef': 'error'
+            'no-undef': 'error',
         },
     },
 ];
