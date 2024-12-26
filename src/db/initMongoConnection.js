@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import {
     getEnvVar
-} from '../utils/getEnvVar.js';
+} from './db/initMongoConnection';
 
 export const initMongoConnection = async () => {
     try {
