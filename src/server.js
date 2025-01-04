@@ -4,7 +4,7 @@ import cors from 'cors';
 
 import {
     getEnvVar
-} from '..//utils/getEnvVar.js';
+} from './utils/getEnvVar.js';
 import {
     getAllContacts,
     getContactById
