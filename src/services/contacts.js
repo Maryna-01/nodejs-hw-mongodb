@@ -1,7 +1,7 @@
 import {
     Contact
 }
-from '../models/contact';
+from '../models/contact.js';
 
 export const getAllContacts = async () => {
     const result = await Contact.find({}, '-createdAt -updatedAt');
