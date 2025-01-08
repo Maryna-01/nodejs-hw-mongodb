@@ -14,16 +14,16 @@ export const getContactById = async (contactId) => {
 };
 
 export const createContact = async (newContactData) => {
-    const contacts = await Contact.find(newContactData);
-    return contacts;
+    const contact = await Contact.create(newContactData);
+    return contact;
 };
 
 export const deleteContact = async (contactId) => {
-    const contacts = await Contact.findByIdAndDelete(contactId);
-    return contacts;
+    const contact = await Contact.findByIdAndDelete(contactId);
+    return contact;
 };
 
 export const updateContact = async (ContactData) => {
-    const contacts = await Contact.find(ContactData);
-    return  contacts;
+    const contact = await Contact.findByIdAndUpdate(contactId, updateFields, { new: true });
+    return  contact;
 };
