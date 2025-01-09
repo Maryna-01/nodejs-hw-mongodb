@@ -42,20 +42,20 @@ export const createContactHandler = async (req, res, next) => {
 };
 
 export const updateContactHandler = async (req, res, next) => {
-    const { contactId } = req.params;
-    const updateFields = req.body;
-
-    const updatedContact = await updateContact(contactId, updateFields);
-
-    if (!updatedContact) {
-        throw createError(404, "Contact not found");
+    try {
+        const { contactId } = req.params;
+        const updatedContact = await updateContact(contactId, req.body);
+        if (!updatedContact) {
+            throw createError(404, 'Contact not found');
+        }
+        res.status(200).json({
+            status: 200,
+            message: 'Contact successfully updated!',
+            data: updatedContact,
+        });
+    } catch (error) {
+        next(error);
     }
-
-    res.status(200).json({
-        status: 200,
-        message: "Successfully patched a contact!",
-        data: updatedContact,
-    });
 };
 
 export const deleteContactHandler = async (req, res, next) => {
