@@ -23,7 +23,7 @@ export const deleteContact = async (contactId) => {
     return contact;
 };
 
-export const updateContact = async (ContactData) => {
+export const updateContact = async (contactId, updateFields) => {
     const contact = await Contact.findByIdAndUpdate(contactId, updateFields, { new: true });
     return  contact;
 };

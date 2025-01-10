@@ -37,21 +37,22 @@ export const createContactHandler = async (req, res, next) => {
     res.status(201).json({
         status: 201,
         message: "Successfully created a contact!",
-        data: newContact,
+        data: result.newContact,
     });
 };
 
 export const updateContactHandler = async (req, res, next) => {
     try {
         const { contactId } = req.params;
-        const updatedContact = await updateContact(contactId, req.body);
-        if (!updatedContact) {
-            throw createError(404, 'Contact not found');
-        }
+        const result = await updateContact(contactId, req.body);
+        if (!result) {
+            next(createHttpError(404, 'Student not found'));
+    return;
+  }
         res.status(200).json({
             status: 200,
-            message: 'Contact successfully updated!',
-            data: updatedContact,
+            message: 'Successfully patched a contact!',
+            data: result.Contact,
         });
     } catch (error) {
         next(error);
