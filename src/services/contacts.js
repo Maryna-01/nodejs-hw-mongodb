@@ -1,29 +1,47 @@
-import {
-    Contact
-}
-from '../models/contact.js';
+import { Contact } from '../models/contact.js';
 
-export const getAllContacts = async () => {
-    const result = await Contact.find();
-    return result;
+const getAllContacts = async () => {
+  const result = await Contact.find({}, '-createdAt -updatedAt');
+  return result;
 };
 
-export const getContactById = async (contactId) => {
-    const result = await Contact.findById(contactId);
-    return result;
+const getContactById = async (contactId) => {
+  const result = await Contact.findById(contactId, '-createdAt -updatedAt');
+  return result;
 };
 
-export const createContact = async (newContactData) => {
-    const contact = await Contact.create(newContactData);
-    return contact;
+const createContact = async (payload) => {
+  const result = await Contact.create(payload);
+  return result;
 };
 
-export const deleteContact = async (contactId) => {
-    const contact = await Contact.findByIdAndDelete(contactId);
-    return contact;
+const updateContact = async (contactId, payload, options = {}) => {
+  const result = await Contact.findOneAndUpdate({ _id: contactId }, payload, {
+    new: true,
+    includeResultMetadata: true,
+    ...options,
+  });
+
+  if (!result || !result.value) return null;
+
+  return {
+    contact: result.value,
+    isNew: Boolean(result?.lastErrorObject?.upserted),
+  };
 };
 
-export const updateContact = async (contactId, updateFields) => {
-    const contact = await Contact.findByIdAndUpdate(contactId, updateFields, { new: true });
-    return  contact;
+const deleteContact = async (contactId) => {
+  const result = await Contact.findOneAndDelete({ _id: contactId });
+
+  return result;
 };
+
+const contactsServices = {
+  getAllContacts,
+  getContactById,
+  createContact,
+  updateContact,
+  deleteContact,
+};
+
+export default contactsServices;

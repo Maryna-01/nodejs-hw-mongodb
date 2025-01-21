@@ -1,71 +1,70 @@
-import createError from 'http-errors';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import createHttpError from 'http-errors';
 import contactsServices from '../services/contacts.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
+const getAllContactsController = async (req, res) => {
+  const contacts = await contactsServices.getAllContacts();
 
-export const getAllContactsHandler = async (req, res) => {
-    const contacts = contactsServices.getAllContacts ();
-    res.status(200).json({
-        status: 200,
-        message: "Successfully found contacts!",
-        data: contacts,
-    });
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully found contacts!',
+    data: contacts,
+  });
 };
 
-export const getContactByIdHandler = async (req, res, next) => {
-    const { contactId } = req.params;
-    const contact = await  contactsServices.getContactById(contactId);
+const getContactByIdController = async (req, res) => {
+  const { contactId } = req.params;
+  const contact = await contactsServices.getContactById(contactId);
 
-    if (!contact) {
-        throw createHttpError(404, "Contact not found");
-    }
+  if (!contact) {
+    throw createHttpError(404, 'Contact not found');
+  }
 
-    res.status(200).json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-    });
+  res.status(200).json({
+    status: 200,
+    message: `Successfully found contact with id ${contactId}!`,
+    data: contact,
+  });
 };
 
- const createContactHandler = async (req, res,) => {
-    const contact = await contactsServices.createContact(req.body);
+const createContactController = async (req, res) => {
+  const contact = await contactsServices.createContact(req.body);
 
-    res.status(201).json({
-        status: 201,
-        message: 'Successfully created a contact!',
-        data: contact,
-      });
-    };
-    
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully created a contact!',
+    data: contact,
+  });
+};
 
-    const updateContactHandler = async (req, res) => {
-        const { contactId } = req.params;
-        const result = await contactsServices.updateContact(contactId, req.body);
-      
-        if (!result) throw createHttpError(404, 'Contact not found');
-      
-        res.status(200).json({
-          status: 200,
-          message: 'Successfully patched a contact!',
-          data: result.contact,
-        });
-      };
-      
+const updateContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await contactsServices.updateContact(contactId, req.body);
 
-      const deleteContactHandler = async (req, res) => {
-        const { contactId } = req.params;
-        const result = await contactsServices.deleteContact(contactId);
-      
-        if (!result) throw createHttpError(404, 'Contact not found');
-      
-        res.status(204).send();
-      };
-      const ctrl = {
-        getAllContactsController: ctrlWrapper(getAllContactsHandler),
-        getContactByIdController: ctrlWrapper(getContactByIdHandler),
-        createContactController: ctrlWrapper(createContactHandler),
-        updateContactController: ctrlWrapper(updateContactHandler),
-        deleteContactController: ctrlWrapper(deleteContactHandler),
-      };
-      
-      export default ctrl;
+  if (!result) throw createHttpError(404, 'Contact not found');
+
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully patched a contact!',
+    data: result.contact,
+  });
+};
+
+const deleteContactController = async (req, res) => {
+  const { contactId } = req.params;
+  const result = await contactsServices.deleteContact(contactId);
+
+  if (!result) throw createHttpError(404, 'Contact not found');
+
+  res.status(204).send();
+};
+
+const ctrl = {
+  getAllContactsController: ctrlWrapper(getAllContactsController),
+  getContactByIdController: ctrlWrapper(getContactByIdController),
+  createContactController: ctrlWrapper(createContactController),
+  updateContactController: ctrlWrapper(updateContactController),
+  deleteContactController: ctrlWrapper(deleteContactController),
+};
+
+export default ctrl;
