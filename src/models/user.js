@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { mongooseErrorHandler } from '../../middlewares/mongooseErrorHandler.js';
+import { mongooseErrorHandler } from '../middlewares/mongooseErrorHandler.js';
 
 const userSchema = new Schema(
   {

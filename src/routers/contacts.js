@@ -3,7 +3,7 @@ import ctrl from '../controllers/contacts.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import * as contactsSchemas from '../validation/contacts.js';
+import * as contactsSchemas from '../validation/contactsValidation.js';
 
 const router = Router();
 
