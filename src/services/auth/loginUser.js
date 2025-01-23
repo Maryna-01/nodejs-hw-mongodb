@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
-import { User } from '../models/user.js';
-import { Session } from '../models/session.js';
+import { User } from '../../models/user.js';
+import { Session } from '../../models/session.js';
 import { createSession } from '../../utils/userSessionOptions.js';
 
 export const loginUser = async (payload) => {

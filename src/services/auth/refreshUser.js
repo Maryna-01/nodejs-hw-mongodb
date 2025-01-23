@@ -1,5 +1,5 @@
 import createHttpError from 'http-errors';
-import { Session } from '../models/session.js';
+import { Session } from '../../models/session.js';
 import { createSession } from '../../utils/userSessionOptions.js';
 
 export const refreshUser = async ({ sessionId, refreshToken }) => {

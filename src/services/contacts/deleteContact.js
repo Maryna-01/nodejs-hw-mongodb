@@ -1,4 +1,4 @@
-import { Contact } from '../models/contact.js';
+import { Contact } from '../../models/contact.js';
 import { getEnvVar } from '../../utils/getEnvVar.js';
 import { deleteFileFromCloudinary } from '../../utils/cloudinaryServices.js';
 import { deleteFileFromUploadDir } from '../../utils/uploadDirServices.js';

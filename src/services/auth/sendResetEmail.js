@@ -5,7 +5,7 @@ import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import handlebars from 'handlebars';
 
-import { User } from '../../db/models/user.js';
+import { User } from '../../models/user.js';
 import { getEnvVar } from '../../utils/getEnvVar.js';
 import { SMTP, TEMPLATES_DIR } from '../../constants/index.js';
 import { sendEmail } from '../../utils/sendEmail.js';
