@@ -3,15 +3,13 @@ import ctrl from '../controllers/contacts/index.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import { upload } from '../middlewares/multer.js';
-import * as contactsSchemas from '../validation/contacts.js';
+import * as contactsSchemas from '../validation/contactsValidation.js';
+import { upload } from '../middlewares/upload.js';
 
 const router = Router();
-
 router.use(authenticate);
 
 router.get('/', ctrl.getAllContactsController);
-
 router.get('/:contactId', isValidId, ctrl.getContactByIdController);
 
 router.post(

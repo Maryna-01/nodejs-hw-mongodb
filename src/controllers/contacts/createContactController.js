@@ -10,7 +10,7 @@ export const createContactController = async (req, res) => {
   let photoUrl;
 
   if (file) {
-    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+    if (getEnvVar('ENABLE_CLOUDINARY') && getEnvVar('ENABLE_CLOUDINARY').startsWith('cloudinary://')) {
       const photo = await saveFileToCloudinary(file);
       photoUrl = photo.secure_url;
     } else {

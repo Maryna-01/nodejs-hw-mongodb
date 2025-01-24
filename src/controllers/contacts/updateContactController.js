@@ -11,8 +11,13 @@ export const updateContactController = async (req, res) => {
 
   let photoUrl;
 
+
+  if (!file && Object.keys(req.body).length === 0) {
+    throw createHttpError(400, 'No data provided for update');
+  }
+
   if (file) {
-    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+    if (getEnvVar('ENABLE_CLOUDINARY') && getEnvVar('ENABLE_CLOUDINARY').startsWith('cloudinary://')) {
       const photo = await saveFileToCloudinary(file);
       photoUrl = photo.secure_url;
     } else {
@@ -20,16 +25,18 @@ export const updateContactController = async (req, res) => {
     }
   }
 
-  const result = await updateContact(contactId, userId, {
-    ...req.body,
-    photo: photoUrl,
-  });
+  const updateData = { ...req.body };
+  if (photoUrl) {
+    updateData.photo = photoUrl;
+  }
+
+  const result = await updateContact(contactId, userId, updateData);
 
   if (!result) throw createHttpError(404, 'Contact not found');
 
   res.status(200).json({
     status: 200,
-    message: 'Successfully patched a contact!',
-    data: result.contact,
+    message: 'Successfully updated the contact!',
+    data: result,
   });
 };
