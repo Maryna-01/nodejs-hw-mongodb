@@ -1,23 +1,12 @@
 import { Router } from 'express';
-import multer from 'multer';
 import ctrl from '../controllers/contacts/index.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { authenticate } from '../middlewares/authenticate.js';
-import * as contactsSchemas from '../validation/contactsValidation.js';
+import { upload } from '../middlewares/multer.js';
+import * as contactsSchemas from '../validation/contacts.js';
 
 const router = Router();
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  },
-});
-
-const upload = multer({ storage });
 
 router.use(authenticate);
 
