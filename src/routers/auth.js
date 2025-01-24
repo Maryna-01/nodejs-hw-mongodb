@@ -32,4 +32,5 @@ router.post(
   validateBody(authSchemas.resetPasswordSchema),
   ctrl.resetPasswordController,
 );
+
 export default router;
