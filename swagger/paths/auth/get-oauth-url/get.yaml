@@ -30,7 +30,7 @@ responses:
                 url:
                   description: 'Google OAuth authorization URL'
                   type: string
-                  example: https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&response_type=code&client_id=372350714937-0fj9tmragiogn1f1i5e2vgs0b0pb96jr.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fyour-production-domain.com%2Fconfirm-google-auth
+                  example: https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&response_type=code&client_id=372350714937-0fj9tmragiogn1f1i5e2vgs0b0pb96jr.apps.googleusercontent.com&redirect_uri=https%3A%2F%2https://nodejs-hw-mongodb-9-stlt.onrender.com%2Fconfirm-google-auth
   '400':
     description: 'Bad request'
   '401':
