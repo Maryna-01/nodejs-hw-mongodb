@@ -6,11 +6,11 @@ import { SMTP } from "../constants/index.js";
 import { getEnvVar } from "./getEnvVar.js";
 
 const transporter = nodemailer.createTransport({
-  host: getEnvVar(SMTP.SMTP_HOST),
-  port: Number(getEnvVar(SMTP.SMTP_PORT)),
+  host: getEnvVar("SMTP_HOST"),
+  port: Number(getEnvVar("SMTP_PORT")),
   auth: {
-    user: getEnvVar(SMTP.SMTP_USER),
-    pass: getEnvVar(SMTP.SMTP_PASSWORD),
+    user: getEnvVar("SMTP_USER"),
+    pass: getEnvVar("SMTP_PASSWORD"),
   },
 });
 
@@ -36,7 +36,7 @@ export const sendEmail = async (to, subject, templateName, templateData) => {
   const html = loadTemplate(templateName, templateData);
 
   const mailOptions = {
-    from: `"Your App" <${getEnvVar(SMTP.SMTP_USER)}>`,
+    from: `"Contact App" <${getEnvVar(SMTP_FROM)}>`,
     to,
     subject,
     html,
