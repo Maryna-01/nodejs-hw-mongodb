@@ -19,7 +19,7 @@ requestBody:
           name:
             description: 'Contact name'
             type: string
-            example: 'Semen Bot'
+            example: 'John Doe'
           phoneNumber:
             description: 'Contact phone number'
             type: number
@@ -27,7 +27,7 @@ requestBody:
           email:
             description: 'Contact email'
             type: string
-            example: lol@gmail.com
+            example: test@gmail.com
           isFavourite:
             description: 'Contact is favourite'
             type: boolean
