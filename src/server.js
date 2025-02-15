@@ -1,4 +1,3 @@
-
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
@@ -10,12 +9,17 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import authRouter from './routers/auth.js';
 import { UPLOAD_DIR } from './constants/index.js';
 
+
+import swaggerUi from 'swagger-ui-express';
+import YAML from 'yamljs';
+
+const swaggerDocument = YAML.load('./docs/openapi.yaml');
+
 const PORT = Number(getEnvVar('PORT', '3000'));
 
 export function setupServer() {
-  
-  const app = express();
-  
+  const app = express();  
+
   app.use(express.json());
   app.use(cors());
   app.use(cookieParser());
@@ -26,6 +30,10 @@ export function setupServer() {
       },
     }),
   );
+
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
   app.use('/auth', authRouter);
   app.use((req, res, next) => {
     console.log(`Time: ${new Date().toLocaleString()}`);
@@ -35,7 +43,7 @@ export function setupServer() {
   app.use('*', notFoundHandler);
   app.use(errorHandler);
   app.use('/uploads', express.static(UPLOAD_DIR));
-  //
+
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
