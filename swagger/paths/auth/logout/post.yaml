@@ -1,4 +1,4 @@
-tags:
+tags: 
   - Auth
 summary: Logout user
 operationId: logouthUser
@@ -7,6 +7,7 @@ security: []
 parameters:
   - name: sessionId
     in: cookie
+    required: true
     schema:
       type: string
       example: 67671bb236f6f120cdd1440c
@@ -14,3 +15,7 @@ parameters:
 responses:
   '204':
     description: User logged out
+  '400':
+    description: Bad request – Invalid session ID
+  '401':
+    description: Unauthorized – User not authenticated
