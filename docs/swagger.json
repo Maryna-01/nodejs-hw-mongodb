@@ -11,10 +11,10 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://nodejs-hw-mongodb-9-stlt.onrender.com"
     },
     {
-      "url": "https://nodejs-hw-mongodb-9-stlt.onrender.com"
+      "url": "http://localhost:3000"
     }
   ],
   "tags": [
@@ -33,9 +33,9 @@
         "tags": [
           "Contacts"
         ],
-        "summary": "Get list of contacts",
+        "summary": "Get contacts",
         "operationId": "getContacts",
-        "description": "Get list of contacts",
+        "description": "Get contacts records. You can use query parameters",
         "security": [
           {
             "bearerAuth": []
@@ -46,16 +46,18 @@
             "in": "query",
             "name": "page",
             "schema": {
-              "type": "integer"
-            },
-            "example": 1
+              "type": "integer",
+              "example": 1,
+              "default": 1
+            }
           },
           {
             "in": "query",
             "name": "perPage",
             "schema": {
               "type": "integer",
-              "example": 10
+              "example": 5,
+              "default": 10
             }
           },
           {
@@ -63,9 +65,20 @@
             "name": "sortBy",
             "schema": {
               "type": "string",
-              "example": "name"
+              "enum": [
+                "_id",
+                "name",
+                "phoneNumber",
+                "contactType",
+                "isFavourite",
+                "email",
+                "createdAt",
+                "updatedAt"
+              ],
+              "example": "name",
+              "default": "_id"
             },
-            "description": "All contact's fields can be mentioned. Default value - _id"
+            "description": "field to sort by"
           },
           {
             "in": "query",
@@ -76,12 +89,21 @@
                 "asc",
                 "desc"
               ],
+              "default": "asc",
               "example": "asc"
             }
           },
           {
             "in": "query",
-            "name": "contactType",
+            "name": "isFavourite",
+            "schema": {
+              "type": "boolean",
+              "example": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
             "schema": {
               "type": "string",
               "enum": [
@@ -89,22 +111,17 @@
                 "home",
                 "personal"
               ],
-              "example": "work"
+              "example": "home"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully found contacts!",
+            "description": "Found contacts",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "status",
-                    "message",
-                    "data"
-                  ],
                   "properties": {
                     "status": {
                       "type": "integer",
@@ -116,37 +133,69 @@
                     },
                     "data": {
                       "type": "object",
-                      "required": [
-                        "data",
-                        "page",
-                        "perPage",
-                        "totalItems",
-                        "totalPages",
-                        "hasNextPage",
-                        "hasPreviousPage"
-                      ],
                       "properties": {
                         "data": {
                           "type": "array",
                           "items": {
-                            "$ref": "#/components/schemas/contact"
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "678cfb412d5639e15b550312"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "MyName"
+                              },
+                              "phoneNumber": {
+                                "type": "string",
+                                "example": "+380000000221"
+                              },
+                              "isFavourite": {
+                                "type": "boolean",
+                                "example": false
+                              },
+                              "contactType": {
+                                "type": "string",
+                                "example": "work"
+                              },
+                              "userId": {
+                                "type": "string",
+                                "example": "678bf83e14d55985f0900f60"
+                              },
+                              "photo": {
+                                "type": "string",
+                                "format": "uri",
+                                "example": "https://res.cloudinary.com/dvc0lg6q7/image/upload/v1737883765/k6dvouzwwey3axxnenxx.png"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-19T13:16:49.317Z"
+                              },
+                              "updatedAt": {
+                                "type": "string",
+                                "format": "date-time",
+                                "example": "2025-01-26T09:29:26.010Z"
+                              }
+                            }
                           }
                         },
                         "page": {
-                          "type": "number",
-                          "example": 2
+                          "type": "integer",
+                          "example": 1
                         },
                         "perPage": {
-                          "type": "number",
-                          "example": 4
+                          "type": "integer",
+                          "example": 10
                         },
                         "totalItems": {
-                          "type": "number",
-                          "example": 4
+                          "type": "integer",
+                          "example": 1
                         },
                         "totalPages": {
-                          "type": "number",
-                          "example": 4
+                          "type": "integer",
+                          "example": 1
                         },
                         "hasNextPage": {
                           "type": "boolean",
@@ -154,7 +203,7 @@
                         },
                         "hasPreviousPage": {
                           "type": "boolean",
-                          "example": true
+                          "example": false
                         }
                       }
                     }
@@ -163,11 +212,8 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
+          "400": {
+            "$ref": "#/components/responses/400"
           }
         }
       },
@@ -208,7 +254,7 @@
                   "email": {
                     "description": "Contact email",
                     "type": "string",
-                    "example": "test@mail.com"
+                    "example": "test@gmail.com"
                   },
                   "isFavourite": {
                     "description": "Contact is favourite",
@@ -494,6 +540,199 @@
           }
         }
       }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register user",
+        "operationId": "registerUser",
+        "description": "Register new user",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "User's name",
+                    "type": "string",
+                    "example": "test"
+                  },
+                  "email": {
+                    "description": "Registration email",
+                    "type": "string",
+                    "format": "email",
+                    "example": "test@mail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "test"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a user!"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "409": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "description": "Registration email",
+                    "type": "string",
+                    "format": "email",
+                    "example": "test@mail.com"
+                  },
+                  "password": {
+                    "description": "User's password",
+                    "type": "string",
+                    "example": "test"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully logged in an user!"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "accessToken"
+                      ],
+                      "properties": {
+                        "accessToken": {
+                          "description": "Access token",
+                          "type": "string",
+                          "example": "4f1a5bb5d88e4576b5442e945db1244c0568f6c88d49e68d430ff348ab56047b"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logouthUser",
+        "description": "Logout user",
+        "security": [],
+        "parameters": [
+          {
+            "name": "sessionId",
+            "in": "cookie",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "67671bb236f6f120cdd1440c"
+            },
+            "description": "Session ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User logged out"
+          },
+          "400": {
+            "description": "Bad request – Invalid session ID"
+          },
+          "401": {
+            "description": "Unauthorized – User not authenticated"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -501,64 +740,6 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer"
-      }
-    },
-    "schemas": {
-      "contact": {
-        "type": "object",
-        "required": [
-          "_id",
-          "name",
-          "phoneNumber",
-          "contactType",
-          "userId"
-        ],
-        "properties": {
-          "_id": {
-            "description": "Contact's id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
-          },
-          "name": {
-            "description": "Contact's name",
-            "type": "string",
-            "example": "John Doe"
-          },
-          "phoneNumber": {
-            "description": "Phone number",
-            "type": "string",
-            "example": "+380000000000"
-          },
-          "email": {
-            "description": "Contact email",
-            "type": "string",
-            "example": "test@mail.com"
-          },
-          "isFavourite": {
-            "description": "Contact's favourite",
-            "type": "boolean",
-            "example": false
-          },
-          "contactType": {
-            "description": "Contact type",
-            "type": "string",
-            "enum": [
-              "work",
-              "home",
-              "personal"
-            ]
-          },
-          "userId": {
-            "description": "Contact's owner id",
-            "type": "string",
-            "example": "65e4decdd286b30065d54af9"
-          },
-          "photo": {
-            "description": "Link to contact's photo",
-            "type": "string",
-            "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
-          }
-        }
       }
     },
     "responses": {
@@ -694,6 +875,64 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "contact": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "phoneNumber",
+          "contactType",
+          "userId"
+        ],
+        "properties": {
+          "_id": {
+            "description": "Contact's id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "name": {
+            "description": "Contact's name",
+            "type": "string",
+            "example": "John Doe"
+          },
+          "phoneNumber": {
+            "description": "Phone number",
+            "type": "string",
+            "example": "+380000000000"
+          },
+          "email": {
+            "description": "Contact email",
+            "type": "string",
+            "example": "test@mail.com"
+          },
+          "isFavourite": {
+            "description": "Contact's favourite",
+            "type": "boolean",
+            "example": false
+          },
+          "contactType": {
+            "description": "Contact type",
+            "type": "string",
+            "enum": [
+              "work",
+              "home",
+              "personal"
+            ]
+          },
+          "userId": {
+            "description": "Contact's owner id",
+            "type": "string",
+            "example": "65e4decdd286b30065d54af9"
+          },
+          "photo": {
+            "description": "Link to contact's photo",
+            "type": "string",
+            "example": "https://res.cloudinary.com/uqwgdu/image/upload/image.png"
           }
         }
       }
